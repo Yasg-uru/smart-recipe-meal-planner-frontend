@@ -172,7 +172,7 @@ const CreateRecipe: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center">
       <form
         onSubmit={HandleSubmit}
-        className="flex flex-col gap-2 p-2 border-[0.5px] border-green-500 w-[50vw] h-auto rounded-xl"
+        className="flex flex-col gap-2 p-2 border-[0.5px] border-green-500  h-auto rounded-xl"
       >
         <h1 className="text-center text-green-500 font-bold text-2xl">
           Create Recipe Form

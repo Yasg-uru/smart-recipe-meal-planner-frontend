@@ -15,6 +15,7 @@ export interface createRecipe {
   cuisine: string;
   mealType: string;
   dietaryLabels: string[];
+  Likes?: number;
   nutritionalInfo: {
     calories: number;
     protein: number;
@@ -23,4 +24,8 @@ export interface createRecipe {
     vitamins: string[];
     minerals: string[];
   };
+}
+
+export interface RecipeGet {
+  Recipes: createRecipe[];
 }
