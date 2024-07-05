@@ -5,6 +5,7 @@ import Login from "./components/auth/Login.tsx";
 import Homepage from "./components/maincomponents/Homepage.tsx";
 import GetRecipes from "./components/recipes/GetRecipes.tsx";
 import CreateRecipe from "./components/recipes/CreateRecipe.tsx";
+import RecipeDetail from "./components/recipes/RecipeDetail.tsx";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/detail" element={<RecipeDetail/>}/>
         <Route path="/recipes/" element={<GetRecipes />}>
           <Route path="create" element={<CreateRecipe />} />
         </Route>

@@ -23,8 +23,11 @@ const GetRecipes: React.FC = () => {
 
       <div className="flex flex-row flex-wrap gap-3 mx-auto">
         {Recipes.length > 0 &&
-          Recipes.map((recipe,index) => (
-            <div key={index} className="card bg-base-100 image-full w-96 shadow-xl">
+          Recipes.map((recipe, index) => (
+            <div
+              key={index}
+              className="card bg-base-100 image-full w-96 shadow-xl"
+            >
               <figure>
                 <img
                   src="https://www.licious.in/blog/wp-content/uploads/2020/12/Chicken-Curry-recipe.jpg"
@@ -38,6 +41,13 @@ const GetRecipes: React.FC = () => {
                   <div className="flex justify-between w-full">
                     <p>{recipe.Likes} Likes</p>
                     <button
+                      onClick={() =>
+                        navigate("/detail", {
+                          state: {
+                            recipeid: recipe._id,
+                          },
+                        })
+                      }
                       type="button"
                       className="btn bg-black border-[0.5px] font-bold border-green-500 hover:bg-black hover:border-red-500 text-green-500 hover:text-red-500 ring ring-green-500 ring-offset-1"
                     >

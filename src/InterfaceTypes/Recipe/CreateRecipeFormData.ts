@@ -16,6 +16,7 @@ export interface createRecipe {
   mealType: string;
   dietaryLabels: string[];
   Likes?: number;
+  _id?:string;
   nutritionalInfo: {
     calories: number;
     protein: number;
