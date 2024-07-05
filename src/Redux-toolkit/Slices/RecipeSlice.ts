@@ -23,6 +23,10 @@ const savestate = (data: RecipeGet[]) => {
 };
 const initialState: RecipeGet = {
   Recipes: loadState() || [],
+  PaginationInfo: {
+    hasNextPage: false,
+    hasPrevPage: false,
+  },
 };
 export const createrecipe: any = createAsyncThunk(
   "/createrecipe",
@@ -78,6 +82,12 @@ const RecipeSlice = createSlice({
     builder.addCase(getrecipesBysearchBar.fulfilled, (state, action) => {
       state.Recipes = action.payload.recipes;
       savestate(state.Recipes as unknown as RecipeGet[]);
+    });
+    builder.addCase(getRecipesbyPagination.fulfilled, (state, action) => {
+      state.Recipes = action.payload.recipes;
+      savestate(state.Recipes as unknown as RecipeGet[]);
+      state.PaginationInfo.hasNextPage = action?.payload?.recipes.hasNextPage;
+      state.PaginationInfo.hasPrevPage = action?.payload?.recipes.hasPrevPage;
     });
   },
 });

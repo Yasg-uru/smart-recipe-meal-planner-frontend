@@ -1,20 +1,41 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
+import { getRecipesbyPagination } from "../../Redux-toolkit/Slices/RecipeSlice";
 
 const GetRecipes: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const { Recipes } = useSelector((state: RootState) => state.recipe);
   const isCreatePath = location.pathname;
   console.log("this is a location path", location.pathname);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const {
+    PaginationInfo: { hasNextPage, hasPrevPage },
+  } = useSelector((state: RootState) => state.recipe);
+
+  const HandlePreviousClick = () => {
+    if (hasPrevPage) {
+      setCurrentPage((page) => page - 1);
+      dispatch(getRecipesbyPagination(currentPage));
+    }
+  };
+  const HandleNextClick = () => {
+    if (hasNextPage) {
+      setCurrentPage((page) => page + 1);
+      dispatch(getRecipesbyPagination(currentPage));
+    }
+  };
+
   return (
     <div className="bg-black min-h-screen flex flex-col gap-2 p-3 ">
       {isCreatePath === "/recipes" && (
         <button
           type="button"
-          onClick={() => navigate("create")}
+          onClick={() => navigate("/create")}
           className="btn text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
         >
           Contribute Your Recipe
@@ -59,7 +80,30 @@ const GetRecipes: React.FC = () => {
             </div>
           ))}
       </div>
-      <Outlet />
+      {
+        <div className="join mx-auto ">
+          <button
+            onClick={HandlePreviousClick}
+            type="button"
+            className="join-item btn font-bold text-2xl bg-black text-green-500 hover:bg-black hover:text-red-500 border-[0.5px] border-green-500 hover:border-pink-500"
+          >
+            «
+          </button>
+          <button
+            type="button"
+            className="join-item btn  bg-black text-green-500 hover:bg-black hover:text-red-500 border-[0.5px] border-green-500 hover:border-pink-500"
+          >
+            Page {currentPage}
+          </button>
+          <button
+            onClick={HandleNextClick}
+            type="button"
+            className="join-item btn font-bold text-2xl bg-black text-green-500 hover:bg-black hover:text-red-500 border-[0.5px] border-green-500 hover:border-pink-500"
+          >
+            »
+          </button>
+        </div>
+      }
     </div>
   );
 };

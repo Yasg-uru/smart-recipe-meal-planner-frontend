@@ -169,7 +169,7 @@ const CreateRecipe: React.FC = () => {
     );
   };
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-black ">
       <form
         onSubmit={HandleSubmit}
         className="flex flex-col gap-2 p-2 border-[0.5px] border-green-500  h-auto rounded-xl"
