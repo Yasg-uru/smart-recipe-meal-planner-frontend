@@ -1,18 +1,61 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { AiFillLike } from "react-icons/ai";
+import { GetAdjustedRecipe, LikeRecipe } from "../../Redux-toolkit/Slices/RecipeSlice";
+export interface AdjustInterface {
+  recipeId: string;
+  persons: number;
+}
+
 const RecipeDetail: React.FC = () => {
   const location = useLocation();
   const { recipeid } = location.state;
   const { Recipes } = useSelector((state: RootState) => state.recipe);
-  const Recipe = Recipes.find((recipe) => recipe._id?.toString() === recipeid);
+  let Recipe = Recipes.find((recipe) => recipe._id?.toString() === recipeid);
+  const loadServings = () => {
+    const serving = sessionStorage.getItem("serving");
+    if (serving) {
+      return parseInt(serving);
+    } else {
+      return Recipe?.NumberofPersons || 1;
+    }
+  };
+  const [servings, setServings] = useState<number>(loadServings());
+
+  const dispatch = useDispatch();
+
   console.log("this is a recipe :", Recipe);
+  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (Recipe?._id) {
+      dispatch(GetAdjustedRecipe({ recipeId: Recipe._id, persons: servings }));
+    }
+  };
+  const handlechange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setServings(parseInt(value));
+  };
   return (
     <div className="bg-black min-h-screen flex flex-col gap-2 items-center p-3">
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          type="number"
+          name="servings"
+          value={servings}
+          onChange={handlechange}
+          className="text-green-500 font-bold bg-black focus:bg-black border-[0.5px] border-green-500 focus:border-red-500 rounded-md"
+        />
+        <button
+          type="submit"
+          className="btn text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
+        >
+          change
+        </button>
+      </form>
       <h1 className="text-center font-bold text-2xl text-pink-500">
-        {Recipe?.title} Info
+        {Recipe?.title} for {servings} servings
       </h1>
       <p className="text-green-500 text-center">{Recipe?.description}</p>
       <div className="flex flex-col gap-1 items-center w-full">
@@ -114,12 +157,12 @@ const RecipeDetail: React.FC = () => {
         </table>
       </div>
 
-      <div className="flex justify-between">
+      <div onClick={()=>dispatch(LikeRecipe(Recipe?._id))} className="flex justify-between cursor-pointer">
         <p className="flex items-center gap-2 text-green-500">
-          <span>{Recipe?.Likes}</span>
           <span>
             <AiFillLike />
           </span>
+          <span>{Recipe?.Likes}</span>
         </p>
       </div>
     </div>

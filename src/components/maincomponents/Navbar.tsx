@@ -1,27 +1,64 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { useNavigate } from "react-router-dom";
-import { getrecipesBysearchBar } from "../../Redux-toolkit/Slices/RecipeSlice";
+import {
+  GetRecipesByMissinIngredients,
+  getrecipesBysearchBar,
+} from "../../Redux-toolkit/Slices/RecipeSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
+export interface queryinterface {
+  query: string;
+  queryType: "normal" | "missingingredient";
+}
 const Navbar: React.FC = () => {
   const imageurl = "";
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setquery] = useState("");
+  const [queryDetails, setQueryDetails] = useState<queryinterface>({
+    query: "",
+    queryType: "normal",
+  });
 
   const handlesubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (query) {
-      dispatch(getrecipesBysearchBar(query));
-      navigate("/recipes");
+    if (queryDetails.query) {
+      if (queryDetails.queryType === "normal") {
+        dispatch(getrecipesBysearchBar(queryDetails.query));
+        navigate("/recipes");
+      } else if (queryDetails.queryType === "missingingredient") {
+        dispatch(GetRecipesByMissinIngredients(queryDetails.query));
+        navigate("/recipes");
+      }
     } else {
       toast.error("please write your query");
     }
   };
-
+  const handlechange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (queryDetails.queryType === "normal") {
+      setQueryDetails({
+        ...queryDetails,
+        [name]: value,
+      });
+    } else {
+      setQueryDetails({
+        ...queryDetails,
+        [name]: value.split(","),
+      });
+    }
+  };
+  const handleQueryTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setQueryDetails({
+      ...queryDetails,
+      queryType: value as "normal" | "missingingredient",
+    });
+  };
+  console.log("this is a query details :", queryDetails);
   return (
     <nav className="flex justify-between border-b-[0.5px]  border-green-500 bg-black  items-center  p-5 h-24 ">
       <div className="flex gap-5 ">
@@ -49,11 +86,24 @@ const Navbar: React.FC = () => {
           <input
             type="text"
             name="query"
-            value={query}
-            onChange={(event) => setquery(event.target.value)}
-            placeholder="Search Recipes "
+            value={queryDetails.query}
+            onChange={handlechange}
+            placeholder={`${
+              queryDetails.queryType === "normal"
+                ? "search query"
+                : "write (comma separated values)"
+            }`}
             className="input input-bordered w-full max-w-xs bg-black border-[0.5px] border-green-500 text-green-500"
           />
+          <select
+            name="queryType"
+            value={queryDetails.queryType}
+            onChange={handleQueryTypeChange}
+            className="bg-black border-[0.5px] border-green-500 text-green-500"
+          >
+            <option value="normal">Normal</option>
+            <option value="missingingredient">Missing Ingredient</option>
+          </select>
           <button type="submit" className="btn bg-green-500 text-white">
             Search
           </button>
@@ -102,6 +152,3 @@ const Navbar: React.FC = () => {
   );
 };
 export default Navbar;
-function state(state: RootState): unknown {
-  throw new Error("Function not implemented.");
-}
