@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { AiFillLike } from "react-icons/ai";
-import { GetAdjustedRecipe, LikeRecipe } from "../../Redux-toolkit/Slices/RecipeSlice";
+import {
+  GetAdjustedRecipe,
+  LikeRecipe,
+} from "../../Redux-toolkit/Slices/RecipeSlice";
 export interface AdjustInterface {
   recipeId: string;
   persons: number;
@@ -157,7 +160,10 @@ const RecipeDetail: React.FC = () => {
         </table>
       </div>
 
-      <div onClick={()=>dispatch(LikeRecipe(Recipe?._id))} className="flex justify-between cursor-pointer">
+      <div
+        onClick={() => dispatch(LikeRecipe(Recipe?._id))}
+        className="flex justify-between cursor-pointer"
+      >
         <p className="flex items-center gap-2 text-green-500">
           <span>
             <AiFillLike />

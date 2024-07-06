@@ -1,0 +1,36 @@
+.custom-date-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-date-picker::-webkit-calendar-picker-indicator {
+  color: green; /* Color of the calendar icon */
+  opacity: 1;
+}
+
+.custom-date-picker::-webkit-inner-spin-button,
+.custom-date-picker::-webkit-clear-button {
+  display: none;
+}
+
+.custom-date-picker::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px;
+  color: green;
+  opacity: 1;
+}
+
+.custom-date-picker:before {
+  content: '\1F4C5'; /* Unicode for calendar emoji */
+  position: absolute;
+  right: 10px;
+  color: green;
+  pointer-events: none;
+  font-size: 1.5em;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.custom-date-picker::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}

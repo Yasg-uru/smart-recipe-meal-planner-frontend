@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { getRecipesbyPagination } from "../../Redux-toolkit/Slices/RecipeSlice";
-
+import "./../../helper/customeDatepicker.css";
 const GetRecipes: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -13,6 +13,11 @@ const GetRecipes: React.FC = () => {
   const isCreatePath = location.pathname;
   console.log("this is a location path", location.pathname);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isMealPlanning, setIsMealPlanning] = useState<boolean>(false);
+  const [recipeSelection, setRecipeSelection] = useState<boolean[]>([]);
+  const [selectionStatus, setSelectionStatus] = useState<boolean>(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<string[]>([]);
+
   const {
     PaginationInfo: { hasNextPage, hasPrevPage },
   } = useSelector((state: RootState) => state.recipe);
@@ -20,16 +25,42 @@ const GetRecipes: React.FC = () => {
   const HandlePreviousClick = () => {
     if (hasPrevPage) {
       setCurrentPage((page) => page - 1);
-      dispatch(getRecipesbyPagination(currentPage));
     }
   };
   const HandleNextClick = () => {
     if (hasNextPage) {
       setCurrentPage((page) => page + 1);
-      dispatch(getRecipesbyPagination(currentPage));
     }
   };
-
+  const HandleCheckBoxChange = (index: number) => {
+    setRecipeSelection((prev) =>
+      prev.map((selected, i) => {
+        return index === i ? !selected : selected;
+      })
+    );
+    const recipeId = Recipes[index]._id;
+    if (recipeId) {
+      setSelectedRecipe((prev) =>
+        prev.includes(recipeId?.toString())
+          ? prev.filter((id) => id !== recipeId)
+          : [...prev, recipeId]
+      );
+    }
+  };
+  useEffect(() => {
+    dispatch(getRecipesbyPagination(currentPage));
+  }, [currentPage]);
+  useEffect(() => {
+    setRecipeSelection(new Array(Recipes.length).fill(false));
+  }, [Recipes]);
+  console.log(
+    "this is your boolean array and selected recipe ids :",
+    selectedRecipe
+  );
+  console.log(
+    "this is your boolean array and selected recipe ids :",
+    recipeSelection
+  );
   return (
     <div className="bg-black min-h-screen flex flex-col gap-2 p-3 ">
       {isCreatePath === "/recipes" && (
@@ -40,6 +71,36 @@ const GetRecipes: React.FC = () => {
         >
           Contribute Your Recipe
         </button>
+      )}
+
+      {!selectionStatus ? (
+        <button
+          type="button"
+          onClick={() => {
+            setSelectionStatus(true);
+          }}
+          className="btn text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
+        >
+          Select Recipes for Mealplan
+        </button>
+      ) : (
+        <div className="join w-full grid grid-flow-col grid-cols-2">
+          <button
+            onClick={() => {
+              setSelectionStatus(false);
+            }}
+            type="button"
+            className="btn btn-join text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            className="btn btn-join text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
+          >
+            Go For Mealplan of selected Recipes
+          </button>
+        </div>
       )}
 
       <div className="flex flex-row flex-wrap gap-3 mx-auto">
@@ -58,6 +119,19 @@ const GetRecipes: React.FC = () => {
               <div className="card-body">
                 <h2 className="card-title">{recipe.title}</h2>
                 <p>{recipe.description}</p>
+                {selectionStatus && (
+                  <div className="form-control">
+                    <label className="cursor-pointer label">
+                      <span className="label-text">Remember me</span>
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-accent"
+                        onChange={() => HandleCheckBoxChange(index)}
+                        value={selectedRecipe[index]}
+                      />
+                    </label>
+                  </div>
+                )}
                 <div className="card-actions justify-end w-full">
                   <div className="flex justify-between w-full">
                     <p>{recipe.Likes} Likes</p>
