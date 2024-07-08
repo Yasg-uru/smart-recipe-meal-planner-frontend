@@ -13,6 +13,7 @@ export const CreateMealplane: any = createAsyncThunk(
     } catch (error) {
       console.log("Error in createmealplane");
       toast.error("failed to create mealplane");
+      throw new Error("failed to create mealplan")
     }
   }
 );

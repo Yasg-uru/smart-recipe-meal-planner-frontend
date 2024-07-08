@@ -95,6 +95,13 @@ const GetRecipes: React.FC = () => {
             Back
           </button>
           <button
+            onClick={() =>
+              navigate("/review", {
+                state: {
+                 selectedRecipe,
+                },
+              })
+            }
             type="button"
             className="btn btn-join text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500   "
           >
