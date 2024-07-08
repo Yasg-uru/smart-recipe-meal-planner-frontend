@@ -5,6 +5,8 @@ import { mealplanForm } from "../../InterfaceTypes/Mealplan/MealplanForm";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { CreateMealplane } from "../../Redux-toolkit/Slices/MealSlice";
+import { createshoppingList } from "../../InterfaceTypes/shoppingList/createShoppingList";
+import { GenerateShoppinList } from "../../Redux-toolkit/Slices/shoppingSlice";
 const ReviewMealPlan: React.FC = () => {
   const location = useLocation();
   const [recipeList, setRecipeList] = useState<any[]>(() => {
@@ -13,7 +15,7 @@ const ReviewMealPlan: React.FC = () => {
   });
   const [Recipe, setRecipes] = useState<any[]>([]);
   const [isMealPlanCreated, setIsMealPlanCreated] = useState<boolean>(false);
-
+  const [ReviewShoppingList, setReviewShoppingList] = useState<boolean>(false);
   const { Recipes } = useSelector((state: RootState) => state.recipe);
   const navigate = useNavigate();
   console.log("this is a recipe list after reload:", recipeList);
@@ -94,6 +96,14 @@ const ReviewMealPlan: React.FC = () => {
     event.preventDefault();
     dispatch(CreateMealplane(MealPlans));
     setIsMealPlanCreated(true);
+  }
+  const ShoppingList = useSelector(
+    (state: RootState) => state.meal.ShoppingList
+  );
+  console.log("this is a shoppinglist", ShoppingList);
+
+  function handlesaveList(): void {
+    dispatch(GenerateShoppinList(ShoppingList));
   }
 
   return (
@@ -181,12 +191,53 @@ const ReviewMealPlan: React.FC = () => {
         {isMealPlanCreated && (
           <button
             type="button"
+            onClick={() => setReviewShoppingList(true)}
             className="btn text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500"
           >
             Generate Shopping List
           </button>
         )}
       </form>
+      {ReviewShoppingList && isMealPlanCreated && (
+        <div className="overflow-x-auto">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr className="text-pink-500 text-2xl font-bold ">
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>isChecked</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ShoppingList.map((list) => (
+                <tr className="text-green-500 ">
+                  <th>{list.name}</th>
+                  <td>{list.quantity}</td>
+                  <td>
+                    <div className="form-control">
+                      <label className="cursor-pointer label">
+                        <input
+                          type="checkbox"
+                          value={list.isChecked.toString()}
+                          className="checkbox checkbox-accent"
+                        />
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              <button
+                onClick={handlesaveList}
+                type="button"
+                className="btn mt-2 text-green-500 bg-black hover:bg-black hover:text-red-500 border-[0.5px] hover:border-red-500"
+              >
+                Save List
+              </button>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
