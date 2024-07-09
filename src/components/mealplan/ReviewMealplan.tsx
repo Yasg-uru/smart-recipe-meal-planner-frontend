@@ -111,6 +111,15 @@ const ReviewMealPlan: React.FC = () => {
       <h1 className="text-pink-500 text-center text-2xl font-bold ">
         Review Meal plan
       </h1>
+
+      <button
+        type="button"
+        onClick={()=>navigate("/meals")}
+        className="bg-black text-green-500 border-[0.5px] border-green-500 hover:border-red-500 hover:text-red-500 hover:bg-black btn join-item"
+      >
+        Your Meal Plans
+      </button>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="date"
