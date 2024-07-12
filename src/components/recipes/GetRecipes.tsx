@@ -98,7 +98,7 @@ const GetRecipes: React.FC = () => {
             onClick={() =>
               navigate("/review", {
                 state: {
-                 selectedRecipe,
+                  selectedRecipe,
                 },
               })
             }

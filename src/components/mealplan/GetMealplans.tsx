@@ -59,52 +59,51 @@ const GetMealplans: React.FC = () => {
         Your Meal Plans
       </h1>
       <div className="flex gap-4 mb-5">
-      <form
-        onSubmit={handleSubmit}
-        className="  flex flex-col   gap-3 p-3 items-center border-[0.5px] border-green-500 hover:border-red-500 rounded-lg"
-      >
-        <div className="flex flex-col gap-1">
-          <label htmlFor="startDate" className="text-green-500">
-            StartDate
-          </label>
-          <input
-            type="date"
-            value={formData.startDate}
-            onChange={handlechange}
-            name="startDate"
-            className="input input-bordered text-green-500 font-bold border-[0.5px] bg-black focus:border-red-500 border-green-500  rounded-lg"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="endDate" className="text-green-500">
-            EndDate
-          </label>
-          <input
-            type="date"
-            value={formData.endDate}
-            onChange={handlechange}
-            name="endDate"
-            className="input input-bordered text-green-500 font-bold border-[0.5px] bg-black focus:border-red-500 border-green-500  rounded-lg"
-          />
-        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="  flex flex-col   gap-3 p-3 items-center border-[0.5px] border-green-500 hover:border-red-500 rounded-lg"
+        >
+          <div className="flex flex-col gap-1">
+            <label htmlFor="startDate" className="text-green-500">
+              StartDate
+            </label>
+            <input
+              type="date"
+              value={formData.startDate}
+              onChange={handlechange}
+              name="startDate"
+              className="input input-bordered text-green-500 font-bold border-[0.5px] bg-black focus:border-red-500 border-green-500  rounded-lg"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="endDate" className="text-green-500">
+              EndDate
+            </label>
+            <input
+              type="date"
+              value={formData.endDate}
+              onChange={handlechange}
+              name="endDate"
+              className="input input-bordered text-green-500 font-bold border-[0.5px] bg-black focus:border-red-500 border-green-500  rounded-lg"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="mx-auto  btn w-full  bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
+          >
+            Search
+          </button>
+        </form>
 
         <button
-          type="submit"
-          className="mx-auto  btn w-full  bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
+          onClick={handleSort}
+          type="button"
+          className="join-item btn bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
         >
-          Search
+          Sort by your DietryPreference
         </button>
-      </form>
-
-      
-      <button
-        onClick={handleSort}
-        type="button"
-        className="join-item btn bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
-        >
-        Sort by your DietryPreference
-      </button>
-        </div>
+      </div>
       <div className="flex gap-5 flex-wrap">
         {meals.map((meal) => (
           <div className="card border-green-500 border-[0.5px] hover:border-red-500  w-96 shadow-xl bg-black rounded-sm mx-auto">

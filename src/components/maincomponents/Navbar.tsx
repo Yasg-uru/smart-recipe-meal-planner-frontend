@@ -78,7 +78,9 @@ const Navbar: React.FC = () => {
         onClick={()=>navigate("/review")}>
           Meal Planner
         </span>
-        <span className="text-green-500 text-lg font-semibold cursor-pointer">
+        <span onClick={()=>{
+          navigate("/shoppinglist")
+        }} className="text-green-500 text-lg font-semibold cursor-pointer">
           Shopping Lists
         </span>
       </div>

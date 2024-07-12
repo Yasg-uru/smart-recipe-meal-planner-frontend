@@ -19,7 +19,7 @@ const ReviewMealPlan: React.FC = () => {
   const { Recipes } = useSelector((state: RootState) => state.recipe);
   const navigate = useNavigate();
   console.log("this is a recipe list after reload:", recipeList);
-
+  console.log("this is location state data :", location.state);
   const [MealPlans, setMealPlans] = useState<mealplanForm>({
     startDate: "",
     endDate: "",
@@ -103,6 +103,7 @@ const ReviewMealPlan: React.FC = () => {
   console.log("this is a shoppinglist", ShoppingList);
 
   function handlesaveList(): void {
+    console.log("this is a shopping list :", ShoppingList);
     dispatch(GenerateShoppinList(ShoppingList));
   }
 
@@ -114,7 +115,7 @@ const ReviewMealPlan: React.FC = () => {
 
       <button
         type="button"
-        onClick={()=>navigate("/meals")}
+        onClick={() => navigate("/meals")}
         className="bg-black text-green-500 border-[0.5px] border-green-500 hover:border-red-500 hover:text-red-500 hover:bg-black btn join-item"
       >
         Your Meal Plans
