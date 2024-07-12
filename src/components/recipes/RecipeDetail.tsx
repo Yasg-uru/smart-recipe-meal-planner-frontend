@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import { AiFillLike } from "react-icons/ai";
 import {
   GetAdjustedRecipe,
+  GetallRecipes,
   LikeRecipe,
 } from "../../Redux-toolkit/Slices/RecipeSlice";
 export interface AdjustInterface {
@@ -14,9 +15,18 @@ export interface AdjustInterface {
 
 const RecipeDetail: React.FC = () => {
   const location = useLocation();
+
   const { recipeid } = location.state;
-  const { Recipes } = useSelector((state: RootState) => state.recipe);
-  let Recipe = Recipes.find((recipe) => recipe._id?.toString() === recipeid);
+  const { AllRecipes } = useSelector((state: RootState) => state.recipe);
+  useEffect(() => {
+    dispatch(GetallRecipes());
+  }, [AllRecipes]);
+  let Recipe = AllRecipes.find((recipe) => recipe._id?.toString() === recipeid);
+  if (!location.state?.ComponentType) {
+    const { Recipes } = useSelector((state: RootState) => state.recipe);
+    Recipe = Recipes.find((recipe) => recipe._id?.toString() === recipeid);
+  }
+
   const loadServings = () => {
     const serving = sessionStorage.getItem("serving");
     if (serving) {
@@ -40,6 +50,9 @@ const RecipeDetail: React.FC = () => {
     const { name, value } = event.target;
     setServings(parseInt(value));
   };
+  useEffect(() => {
+    loadServings();
+  }, [Recipe]);
   return (
     <div className="bg-black min-h-screen flex flex-col gap-2 items-center p-3">
       <form onSubmit={handleSubmit} className="flex gap-2">

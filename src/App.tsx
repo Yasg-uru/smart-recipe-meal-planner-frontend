@@ -8,6 +8,7 @@ import CreateRecipe from "./components/recipes/CreateRecipe.tsx";
 import RecipeDetail from "./components/recipes/RecipeDetail.tsx";
 import ReviewMealPlan from "./components/mealplan/ReviewMealplan.tsx";
 import GetMealplans from "./components/mealplan/GetMealplans.tsx";
+import Detail from "./components/mealplan/Detail.tsx";
 
 function App() {
   return (
@@ -17,12 +18,12 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/detail" element={<RecipeDetail/>}/>
-        <Route path="/recipes" element={<GetRecipes />}>
-        </Route>
-          <Route path="/create" element={<CreateRecipe />} />
-          <Route path="/review" element={<ReviewMealPlan/>}/>
-          <Route path="/meals" element={<GetMealplans/>}/>
+        <Route path="/detail" element={<RecipeDetail />} />
+        <Route path="/recipes" element={<GetRecipes />}></Route>
+        <Route path="/create" element={<CreateRecipe />} />
+        <Route path="/review" element={<ReviewMealPlan />} />
+        <Route path="/meals" element={<GetMealplans />} />
+        <Route path="/mealdetail" element={<Detail />} />
       </Routes>
     </>
   );

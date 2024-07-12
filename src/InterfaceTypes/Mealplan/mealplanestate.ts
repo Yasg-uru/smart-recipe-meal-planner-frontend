@@ -10,6 +10,7 @@ export interface paginationDetails {
 export interface meals {
   startDate: string;
   endDate: string;
+  _id:string ;
   meals: {
     day: string;
     recipes: string[];

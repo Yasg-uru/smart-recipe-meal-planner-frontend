@@ -68,6 +68,23 @@ export const GetYourMeals: any = createAsyncThunk(
     }
   }
 );
+export const deleteMeal: any = createAsyncThunk(
+  "/meal/delete",
+  async (mealId) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/mealplan/delete/${mealId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("error in delete meal ");
+      toast.error("error is occured");
+    }
+  }
+);
 const MealSlice = createSlice({
   name: "meal",
   initialState,

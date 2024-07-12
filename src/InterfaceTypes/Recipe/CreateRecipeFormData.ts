@@ -16,7 +16,7 @@ export interface createRecipe {
   mealType: string;
   dietaryLabels: string[];
   Likes?: number;
-  _id?: string;
+  _id: string;
   nutritionalInfo: {
     calories: number;
     protein: number;
@@ -29,6 +29,8 @@ export interface createRecipe {
 
 export interface RecipeGet {
   Recipes: createRecipe[];
+  AllRecipes:createRecipe[];
+
   PaginationInfo: {
     hasNextPage: boolean;
     hasPrevPage: boolean;

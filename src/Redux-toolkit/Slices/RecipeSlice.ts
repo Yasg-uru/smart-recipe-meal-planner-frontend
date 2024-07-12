@@ -28,6 +28,7 @@ const initialState: RecipeGet = {
     hasNextPage: false,
     hasPrevPage: false,
   },
+  AllRecipes: [],
 };
 export const createrecipe: any = createAsyncThunk(
   "/createrecipe",
@@ -130,6 +131,20 @@ export const LikeRecipe: any = createAsyncThunk(
     }
   }
 );
+export const GetallRecipes: any = createAsyncThunk(
+  "/get/all/recipe",
+  async () => {
+    try {
+      const response = await axiosInstance.get("/recipe/", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.log("Error in get all recipes ", error);
+      toast.error("failed to get all recipes ");
+    }
+  }
+);
 const RecipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -172,6 +187,9 @@ const RecipeSlice = createSlice({
         state.Recipes[index] = action?.payload.recipe;
         savestate(state.Recipes as unknown as RecipeGet[]);
       }
+    });
+    builder.addCase(GetallRecipes.fulfilled, (state, action) => {
+      state.AllRecipes = action?.payload?.recipes;
     });
   },
 });

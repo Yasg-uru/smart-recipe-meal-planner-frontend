@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetYourMeals } from "../../Redux-toolkit/Slices/MealSlice";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
+import { useNavigate } from "react-router-dom";
 
 const GetMealplans: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const dispatch = useDispatch();
+  const navigate=useNavigate();
+
   const {
     Pagination: { hasNextPage, hasPrevPage },
   } = useSelector((state: RootState) => state.meal);
@@ -59,6 +62,9 @@ const GetMealplans: React.FC = () => {
               <div className="card-actions justify-end">
                 <button
                   type="button"
+                  onClick={()=>{
+                    navigate("/mealdetail",{state:{id:meal._id}})
+                  }}
                   className="bg-black text-green-500 border-[0.5px] border-green-500 hover:border-red-500 hover:text-red-500 hover:bg-black btn join-item"
                 >
                   More Detail
