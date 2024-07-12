@@ -104,6 +104,21 @@ export const searchmeals: any = createAsyncThunk(
     }
   }
 );
+export const filterByDietryPreference: any = createAsyncThunk(
+  "/mealplan/bydietry",
+  async () => {
+    try {
+      const response = await axiosInstance.get(`/mealplan/bydietrypreference`, {
+        withCredentials: true,
+      });
+      toast.success("successfully fetched your dietry preference ");
+      return response.data;
+    } catch (error) {
+      console.log("Error in filter dietrypreference", error);
+      toast.error("erorr is filterdietrypreference");
+    }
+  }
+);
 const MealSlice = createSlice({
   name: "meal",
   initialState,
@@ -121,6 +136,12 @@ const MealSlice = createSlice({
     });
     builder.addCase(searchmeals.fulfilled, (state, action) => {
       state.meals = action.payload.result;
+      saveMealsData(state.meals);
+      state.Pagination.hasNextPage = false;
+      state.Pagination.hasPrevPage = false;
+    });
+    builder.addCase(filterByDietryPreference.fulfilled, (state, action) => {
+      state.meals = action.payload.filteredMealPlans;
       saveMealsData(state.meals);
       state.Pagination.hasNextPage = false;
       state.Pagination.hasPrevPage = false;

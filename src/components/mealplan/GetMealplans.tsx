@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  filterByDietryPreference,
   GetYourMeals,
   searchmeals,
 } from "../../Redux-toolkit/Slices/MealSlice";
@@ -49,14 +50,18 @@ const GetMealplans: React.FC = () => {
     event.preventDefault();
     dispatch(searchmeals(formData));
   };
+  const handleSort = () => {
+    dispatch(filterByDietryPreference());
+  };
   return (
-    <div className="flex flex-col bg-black min-h-screen items-center ">
+    <div className="  flex flex-col bg-black min-h-screen items-center ">
       <h1 className="text-green-500 text-center font-bold text-2xl ">
         Your Meal Plans
       </h1>
+      <div className="flex gap-4 mb-5">
       <form
         onSubmit={handleSubmit}
-        className="flex w-full gap-3 p-3 items-center border-2 border-red-500"
+        className="  flex flex-col   gap-3 p-3 items-center border-[0.5px] border-green-500 hover:border-red-500 rounded-lg"
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="startDate" className="text-green-500">
@@ -85,11 +90,21 @@ const GetMealplans: React.FC = () => {
 
         <button
           type="submit"
-          className="join-item btn bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
+          className="mx-auto  btn w-full  bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
         >
           Search
         </button>
       </form>
+
+      
+      <button
+        onClick={handleSort}
+        type="button"
+        className="join-item btn bg-black text-green-500 hover:bg-black hover:border-red-500 border-[0.5px] border-green-500"
+        >
+        Sort by your DietryPreference
+      </button>
+        </div>
       <div className="flex gap-5 flex-wrap">
         {meals.map((meal) => (
           <div className="card border-green-500 border-[0.5px] hover:border-red-500  w-96 shadow-xl bg-black rounded-sm mx-auto">
