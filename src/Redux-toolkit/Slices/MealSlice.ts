@@ -6,6 +6,7 @@ import {
   meals,
   ShoppingList,
 } from "../../InterfaceTypes/Mealplan/mealplanestate";
+import { Mealsearchinterface } from "../../components/mealplan/GetMealplans";
 function loadData() {
   const savedData = sessionStorage.getItem("shoppinglist");
   if (savedData) {
@@ -85,6 +86,24 @@ export const deleteMeal: any = createAsyncThunk(
     }
   }
 );
+export const searchmeals: any = createAsyncThunk(
+  "/mealplan/search",
+  async (formdata: Mealsearchinterface) => {
+    try {
+      const response = await axiosInstance.get(
+        `/mealplan/searchmeals?startDate=${formdata.startDate}&endDate=${formdata.endDate}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("error in searchmeals ", error);
+      toast.error("failed to search meals by start and enddate ");
+    }
+  }
+);
 const MealSlice = createSlice({
   name: "meal",
   initialState,
@@ -99,6 +118,12 @@ const MealSlice = createSlice({
       state.Pagination.hasPrevPage = action.payload.hasPrevPage;
       state.Pagination.hasNextPage = action.payload.hasNextPage;
       saveMealsData(state.meals);
+    });
+    builder.addCase(searchmeals.fulfilled, (state, action) => {
+      state.meals = action.payload.result;
+      saveMealsData(state.meals);
+      state.Pagination.hasNextPage = false;
+      state.Pagination.hasPrevPage = false;
     });
   },
 });
