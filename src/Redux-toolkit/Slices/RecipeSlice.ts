@@ -29,6 +29,30 @@ const initialState: RecipeGet = {
     hasPrevPage: false,
   },
   AllRecipes: [],
+  comparedInfo: {
+    calories: 0,
+    protein: 0,
+    carbohydrates: 0,
+    fats: 0,
+    vitamins: [],
+    minerals: [],
+  },
+  dailyGoals: {
+    calories: 0,
+    protein: 0,
+    carbohydrates: 0,
+    fats: 0,
+    vitamins: [],
+    minerals: [],
+  },
+  recipe: {
+    calories: 0,
+    protein: 0,
+    carbohydrates: 0,
+    fats: 0,
+    vitamins: [],
+    minerals: [],
+  },
 };
 export const createrecipe: any = createAsyncThunk(
   "/createrecipe",
@@ -145,6 +169,23 @@ export const GetallRecipes: any = createAsyncThunk(
     }
   }
 );
+export const compareRecipeWIthDailyGoals:any = createAsyncThunk(
+  "/recipe/compare",
+  async (recipeId) => {
+    try {
+      const response = await axiosInstance.get(
+        `recipe/compare?recipeId=${recipeId}`,
+        {
+          withCredentials:true
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("Error in Comparing recipe with your dailygoals ");
+      toast.error("failed to compare recipe ");
+    }
+  }
+);
 const RecipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -190,6 +231,11 @@ const RecipeSlice = createSlice({
     });
     builder.addCase(GetallRecipes.fulfilled, (state, action) => {
       state.AllRecipes = action?.payload?.recipes;
+    });
+    builder.addCase(compareRecipeWIthDailyGoals.fulfilled, (state, action) => {
+      state.comparedInfo = action.payload.comparedInfo;
+      state.dailyGoals = action.payload.dailyGoals;
+      state.recipe = action.payload.recipe;
     });
   },
 });

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
-import { getRecipesbyPagination } from "../../Redux-toolkit/Slices/RecipeSlice";
+import {
+  compareRecipeWIthDailyGoals,
+  getRecipesbyPagination,
+} from "../../Redux-toolkit/Slices/RecipeSlice";
 import "./../../helper/customeDatepicker.css";
 const GetRecipes: React.FC = () => {
   const navigate = useNavigate();
@@ -61,6 +64,16 @@ const GetRecipes: React.FC = () => {
     "this is your boolean array and selected recipe ids :",
     recipeSelection
   );
+  function handleCompareClick(id: string): void {
+    dispatch(compareRecipeWIthDailyGoals(id));
+
+    navigate("/compare", {
+      state: {
+        id,
+      },
+    });
+  }
+
   return (
     <div className="bg-black min-h-screen flex flex-col gap-2 p-3 ">
       {isCreatePath === "/recipes" && (
@@ -129,7 +142,6 @@ const GetRecipes: React.FC = () => {
                 {selectionStatus && (
                   <div className="form-control">
                     <label className="cursor-pointer label">
-                      <span className="label-text">Remember me</span>
                       <input
                         type="checkbox"
                         className="checkbox checkbox-accent"
@@ -142,19 +154,28 @@ const GetRecipes: React.FC = () => {
                 <div className="card-actions justify-end w-full">
                   <div className="flex justify-between w-full">
                     <p>{recipe.Likes} Likes</p>
-                    <button
-                      onClick={() =>
-                        navigate("/detail", {
-                          state: {
-                            recipeid: recipe._id,
-                          },
-                        })
-                      }
-                      type="button"
-                      className="btn bg-black border-[0.5px] font-bold border-green-500 hover:bg-black hover:border-red-500 text-green-500 hover:text-red-500 ring ring-green-500 ring-offset-1"
-                    >
-                      full info
-                    </button>
+                    <div className="flex gap-5">
+                      <button
+                        onClick={() =>
+                          navigate("/detail", {
+                            state: {
+                              recipeid: recipe._id,
+                            },
+                          })
+                        }
+                        type="button"
+                        className="btn bg-black border-[0.5px] font-bold border-green-500 hover:bg-black hover:border-red-500 text-green-500 hover:text-red-500 ring ring-green-500 ring-offset-1"
+                      >
+                        full info
+                      </button>
+                      <button
+                        onClick={() => handleCompareClick(recipe._id)}
+                        type="button"
+                        className="btn bg-black border-[0.5px] font-bold border-green-500 hover:bg-black hover:border-red-500 text-green-500 hover:text-red-500 ring ring-green-500 ring-offset-1"
+                      >
+                        Compare
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

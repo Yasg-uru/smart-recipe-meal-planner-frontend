@@ -29,10 +29,34 @@ export interface createRecipe {
 
 export interface RecipeGet {
   Recipes: createRecipe[];
-  AllRecipes:createRecipe[];
+  AllRecipes: createRecipe[];
 
   PaginationInfo: {
     hasNextPage: boolean;
     hasPrevPage: boolean;
+  };
+  comparedInfo: {
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fats: number;
+    vitamins: boolean[];
+    minerals: boolean[];
+  };
+  dailyGoals: {
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fats: number;
+    vitamins: string[];
+    minerals: string[];
+  };
+  recipe: {
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fats: number;
+    vitamins: string[];
+    minerals: string[];
   };
 }
