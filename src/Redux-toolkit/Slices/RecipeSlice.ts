@@ -53,6 +53,24 @@ const initialState: RecipeGet = {
     vitamins: [],
     minerals: [],
   },
+  RecipeComparasion: {
+    calories: {
+      value: 0,
+      leader: "",
+    },
+    protein: {
+      value: 0,
+      leader: "",
+    },
+    carbohydrates: {
+      value: 0,
+      leader: "",
+    },
+    fats: {
+      value: 0,
+      leader: "",
+    },
+  },
 };
 export const createrecipe: any = createAsyncThunk(
   "/createrecipe",
@@ -155,6 +173,7 @@ export const LikeRecipe: any = createAsyncThunk(
     }
   }
 );
+
 export const GetallRecipes: any = createAsyncThunk(
   "/get/all/recipe",
   async () => {
@@ -169,20 +188,38 @@ export const GetallRecipes: any = createAsyncThunk(
     }
   }
 );
-export const compareRecipeWIthDailyGoals:any = createAsyncThunk(
+export const compareRecipeWIthDailyGoals: any = createAsyncThunk(
   "/recipe/compare",
   async (recipeId) => {
     try {
       const response = await axiosInstance.get(
         `recipe/compare?recipeId=${recipeId}`,
         {
-          withCredentials:true
+          withCredentials: true,
         }
       );
       return response.data;
     } catch (error) {
       console.log("Error in Comparing recipe with your dailygoals ");
       toast.error("failed to compare recipe ");
+    }
+  }
+);
+export const CompareRecipes: any = createAsyncThunk(
+  "/recipe/comparasion",
+  async (formdata: { recipe1: string; recipe2: string }) => {
+    try {
+      const response = await axiosInstance.get(
+        `/recipe/compareRecipes?recipeId1=${formdata.recipe1}&recipeId2=${formdata.recipe2}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("Error in compare recipe ", error);
+
+      toast.error("failed to compare recipes ");
     }
   }
 );
@@ -236,6 +273,9 @@ const RecipeSlice = createSlice({
       state.comparedInfo = action.payload.comparedInfo;
       state.dailyGoals = action.payload.dailyGoals;
       state.recipe = action.payload.recipe;
+    });
+    builder.addCase(CompareRecipes.fulfilled, (state, action) => {
+      state.RecipeComparasion = action.payload.comparedInfo;
     });
   },
 });

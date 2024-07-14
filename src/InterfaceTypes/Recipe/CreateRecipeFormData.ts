@@ -26,6 +26,24 @@ export interface createRecipe {
     minerals: string[];
   };
 }
+export interface RecipeComparaion {
+  calories: {
+    value: number;
+    leader: string;
+  };
+  protein: {
+    value: number;
+    leader: string;
+  };
+  carbohydrates: {
+    value: number;
+    leader: string;
+  };
+  fats: {
+    value: number;
+    leader: string;
+  };
+}
 
 export interface RecipeGet {
   Recipes: createRecipe[];
@@ -59,4 +77,5 @@ export interface RecipeGet {
     vitamins: string[];
     minerals: string[];
   };
+  RecipeComparasion: RecipeComparaion;
 }

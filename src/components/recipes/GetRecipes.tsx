@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../InterfaceTypes/RootstateInterface";
 import {
   compareRecipeWIthDailyGoals,
@@ -16,11 +16,26 @@ const GetRecipes: React.FC = () => {
   const isCreatePath = location.pathname;
   console.log("this is a location path", location.pathname);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isMealPlanning, setIsMealPlanning] = useState<boolean>(false);
+
   const [recipeSelection, setRecipeSelection] = useState<boolean[]>([]);
   const [selectionStatus, setSelectionStatus] = useState<boolean>(false);
   const [selectedRecipe, setSelectedRecipe] = useState<string[]>([]);
-
+  const [comparasionRecipe, setComparasionRecipe] = useState<string[]>([]);
+  const HandleCheckBoxChangeStatus = (recipeId: string) => {
+    if (recipeId) {
+      if (comparasionRecipe.includes(recipeId)) {
+        setComparasionRecipe((prevdata) =>
+          prevdata.filter((recipe) => recipe.toString() !== recipeId.toString())
+        );
+      } else if (comparasionRecipe.length < 2) {
+        setComparasionRecipe((prev) => [...prev, recipeId]);
+      }
+    }
+    console.log(
+      "this is a value of the selected comparasion recipe :",
+      comparasionRecipe
+    );
+  };
   const {
     PaginationInfo: { hasNextPage, hasPrevPage },
   } = useSelector((state: RootState) => state.recipe);
@@ -50,6 +65,19 @@ const GetRecipes: React.FC = () => {
       );
     }
   };
+  const HandleCompareRecipeClicks = () => {
+    navigate("/recipecompare", {
+      state: {
+        RecipeIds: comparasionRecipe,
+        Recipe1Name: Recipes.find(
+          (recipe) => recipe._id.toString() === comparasionRecipe[0]
+        )?.title,
+        Recipe2Name: Recipes.find(
+          (recipe) => recipe._id.toString() === comparasionRecipe[1]
+        )?.title,
+      },
+    });
+  };
   useEffect(() => {
     dispatch(getRecipesbyPagination(currentPage));
   }, [currentPage]);
@@ -75,7 +103,7 @@ const GetRecipes: React.FC = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen flex flex-col gap-2 p-3 ">
+    <div className="bg-black min-h-screen flex flex-col gap-2 p-3 relative">
       {isCreatePath === "/recipes" && (
         <button
           type="button"
@@ -137,6 +165,19 @@ const GetRecipes: React.FC = () => {
                 />
               </figure>
               <div className="card-body">
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text text-white">
+                      Add to compare
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={comparasionRecipe.includes(recipe._id)}
+                      onChange={() => HandleCheckBoxChangeStatus(recipe._id)}
+                      className="checkbox checkbox-accent"
+                    />
+                  </label>
+                </div>
                 <h2 className="card-title">{recipe.title}</h2>
                 <p>{recipe.description}</p>
                 {selectionStatus && (
@@ -206,6 +247,17 @@ const GetRecipes: React.FC = () => {
           </button>
         </div>
       }
+      {comparasionRecipe.length > 0 && (
+        <div className="fixed bottom-0 right-1 text-white z-50">
+          <button
+            type="submit"
+            onClick={HandleCompareRecipeClicks}
+            className="join-item btn font-bold text-2xl bg-black text-green-500 hover:bg-black hover:text-red-500 border-[0.5px] border-green-500 hover:border-pink-500"
+          >
+            Compare
+          </button>
+        </div>
+      )}
     </div>
   );
 };

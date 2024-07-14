@@ -12,6 +12,7 @@ import Detail from "./components/mealplan/Detail.tsx";
 import ShoppingList from "./components/ShoppingList/shoppingList.tsx";
 import ReviewList from "./components/ShoppingList/ReviewList.tsx";
 import CompareRecipewithDailyGoals from "./components/recipes/CompareRecipewithDailyGoals.tsx";
+import RecipeComparasion from "./components/recipes/RecipeComparasion.tsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/shoppinglist" element={<ShoppingList/>} />
         <Route path="/updateList" element={<ReviewList/>} />
         <Route path="/compare" element={<CompareRecipewithDailyGoals/>} />
+        <Route path="/recipecompare" element={<RecipeComparasion/>}/>
       </Routes>
     </>
   );
